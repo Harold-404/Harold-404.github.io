@@ -5,18 +5,37 @@
   
 
   
-  <title>Harold_404</title>
+  <title>DVWA漏洞平台渗透测试及代码审计 | Harold_404</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="以傲慢与偏执，回敬傲慢与偏见">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Harold_404">
-<meta property="og:url" content="http://har01d.me/index.html">
+  <meta name="description" content="注：如下图所示，此报告研究顺序参照DVWA测试平台中各模块的排序。   0X01 环境配置介绍环境配置使用VMWare Workstation搭建Windows 10虚拟机，安装phpstudy，将DVWA放入WWW文件夹，访问setup.php进行安装，并检查问题，发现以下问题： 环境配置遇到的问题 问题一：PHP function allow_url_include: Disabled 相关">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DVWA漏洞平台渗透测试及代码审计">
+<meta property="og:url" content="http://har01d.me/2018/02/02/DVWA漏洞平台渗透测试及代码审计报告-1.2/index.html">
 <meta property="og:site_name" content="Harold_404">
-<meta property="og:description" content="以傲慢与偏执，回敬傲慢与偏见">
+<meta property="og:description" content="注：如下图所示，此报告研究顺序参照DVWA测试平台中各模块的排序。   0X01 环境配置介绍环境配置使用VMWare Workstation搭建Windows 10虚拟机，安装phpstudy，将DVWA放入WWW文件夹，访问setup.php进行安装，并检查问题，发现以下问题： 环境配置遇到的问题 问题一：PHP function allow_url_include: Disabled 相关">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="d:/DVWA报告/00%20目录666.png">
+<meta property="og:image" content="d:/DVWA报告/01%20环境配置遇到的问题233.png">
+<meta property="og:image" content="d:/DVWA报告/02%20allow%20url%20include.png">
+<meta property="og:image" content="d:/DVWA报告/09%20recaptcha%20key.png">
+<meta property="og:image" content="d:/DVWA报告/brute%20force/01%20send%20to%20intruder.png">
+<meta property="og:image" content="d:/DVWA报告/brute%20force/02%20position.png">
+<meta property="og:image" content="d:/DVWA报告/brute%20force/03%20字典.png">
+<meta property="og:image" content="d:/DVWA报告/brute%20force/04%20result.png">
+<meta property="og:image" content="d:/DVWA报告/brute%20force/05%20sql报错.png">
+<meta property="og:image" content="d:/DVWA报告/brute%20force/06%20success.png">
+<meta property="og:image" content="d:/DVWA报告/token%20python脚本.png">
+<meta property="og:image" content="d:/DVWA报告/exec/01%20low.png">
+<meta property="og:image" content="d:/DVWA报告/exec/02%2065500.png">
+<meta property="og:image" content="d:/DVWA报告/exec/03%2065501.png">
+<meta property="og:image" content="d:/DVWA报告/exec/04%20管道符.png">
+<meta property="og:image" content="d:/DVWA报告/sql/01.png">
+<meta property="og:image" content="d:/DVWA报告/sql/03%20成功.png">
+<meta property="og:updated_time" content="2018-02-02T10:18:38.311Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Harold_404">
-<meta name="twitter:description" content="以傲慢与偏执，回敬傲慢与偏见">
+<meta name="twitter:title" content="DVWA漏洞平台渗透测试及代码审计">
+<meta name="twitter:description" content="注：如下图所示，此报告研究顺序参照DVWA测试平台中各模块的排序。   0X01 环境配置介绍环境配置使用VMWare Workstation搭建Windows 10虚拟机，安装phpstudy，将DVWA放入WWW文件夹，访问setup.php进行安装，并检查问题，发现以下问题： 环境配置遇到的问题 问题一：PHP function allow_url_include: Disabled 相关">
+<meta name="twitter:image" content="d:/DVWA报告/00%20目录666.png">
   
     <link rel="alternate" href="/atom.xml" title="Harold_404" type="application/atom+xml">
   
@@ -67,9 +86,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-DVWA漏洞平台渗透测试及代码审计报告-1.2" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-DVWA漏洞平台渗透测试及代码审计报告-1.2" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/02/02/DVWA漏洞平台渗透测试及代码审计报告-1.2/" class="article-date">
   <time datetime="2018-02-02T09:34:38.000Z" itemprop="datePublished">2018-02-02</time>
@@ -82,8 +99,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/02/DVWA漏洞平台渗透测试及代码审计报告-1.2/">DVWA漏洞平台渗透测试及代码审计</a>
+    <h1 class="article-title" itemprop="name">
+      DVWA漏洞平台渗透测试及代码审计
     </h1>
   
 
@@ -285,56 +302,19 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/02/01/hello-world/" class="article-date">
-  <time datetime="2018-02-01T03:13:53.566Z" itemprop="datePublished">2018-02-01</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/02/01/hello-world/">Hello World</a>
-    </h1>
+    <a href="/2018/02/01/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">Hello World</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://har01d.me/2018/02/01/hello-world/" data-id="cjd5s285o0001kkkg4lx0hucn" class="article-share-link">Teilen</a>
-      
-      
-    </footer>
-  </div>
   
 </article>
-
-
-  
-
 
 </section>
         
