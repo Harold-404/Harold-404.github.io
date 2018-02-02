@@ -1,114 +1,171 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
+<html lang="en">
 
-  
-  <title>DVWA漏洞平台渗透测试及代码审计 | Harold_404</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="注：如下图所示，此报告研究顺序参照DVWA测试平台中各模块的排序。   0X01 环境配置介绍环境配置使用VMWare Workstation搭建Windows 10虚拟机，安装phpstudy，将DVWA放入WWW文件夹，访问setup.php进行安装，并检查问题，发现以下问题： 环境配置遇到的问题 问题一：PHP function allow_url_include: Disabled 相关">
-<meta property="og:type" content="article">
-<meta property="og:title" content="DVWA漏洞平台渗透测试及代码审计">
-<meta property="og:url" content="http://har01d.me/2018/02/02/DVWA漏洞平台渗透测试及代码审计报告-1.2/index.html">
-<meta property="og:site_name" content="Harold_404">
-<meta property="og:description" content="注：如下图所示，此报告研究顺序参照DVWA测试平台中各模块的排序。   0X01 环境配置介绍环境配置使用VMWare Workstation搭建Windows 10虚拟机，安装phpstudy，将DVWA放入WWW文件夹，访问setup.php进行安装，并检查问题，发现以下问题： 环境配置遇到的问题 问题一：PHP function allow_url_include: Disabled 相关">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="d:/DVWA报告/00%20目录666.png">
-<meta property="og:image" content="d:/DVWA报告/01%20环境配置遇到的问题233.png">
-<meta property="og:image" content="d:/DVWA报告/02%20allow%20url%20include.png">
-<meta property="og:image" content="d:/DVWA报告/09%20recaptcha%20key.png">
-<meta property="og:image" content="d:/DVWA报告/brute%20force/01%20send%20to%20intruder.png">
-<meta property="og:image" content="d:/DVWA报告/brute%20force/02%20position.png">
-<meta property="og:image" content="d:/DVWA报告/brute%20force/03%20字典.png">
-<meta property="og:image" content="d:/DVWA报告/brute%20force/04%20result.png">
-<meta property="og:image" content="d:/DVWA报告/brute%20force/05%20sql报错.png">
-<meta property="og:image" content="d:/DVWA报告/brute%20force/06%20success.png">
-<meta property="og:image" content="d:/DVWA报告/token%20python脚本.png">
-<meta property="og:image" content="d:/DVWA报告/exec/01%20low.png">
-<meta property="og:image" content="d:/DVWA报告/exec/02%2065500.png">
-<meta property="og:image" content="d:/DVWA报告/exec/03%2065501.png">
-<meta property="og:image" content="d:/DVWA报告/exec/04%20管道符.png">
-<meta property="og:image" content="d:/DVWA报告/sql/01.png">
-<meta property="og:image" content="d:/DVWA报告/sql/03%20成功.png">
-<meta property="og:updated_time" content="2018-02-02T10:18:38.311Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="DVWA漏洞平台渗透测试及代码审计">
-<meta name="twitter:description" content="注：如下图所示，此报告研究顺序参照DVWA测试平台中各模块的排序。   0X01 环境配置介绍环境配置使用VMWare Workstation搭建Windows 10虚拟机，安装phpstudy，将DVWA放入WWW文件夹，访问setup.php进行安装，并检查问题，发现以下问题： 环境配置遇到的问题 问题一：PHP function allow_url_include: Disabled 相关">
-<meta name="twitter:image" content="d:/DVWA报告/00%20目录666.png">
-  
-    <link rel="alternate" href="/atom.xml" title="Harold_404" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/style.css">
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="以傲慢与偏执，回敬傲慢与偏见">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="Harold_404" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        DVWA漏洞平台渗透测试及代码审计｜undefined
+        
+    </title>
+
+    <link rel="canonical" href="http://har01d.me/2018/02/02/DVWA漏洞平台渗透测试及代码审计报告-1.2/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
 </head>
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Harold_404</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">Born to be Proud</a>
-        </h2>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://har01d.me"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-DVWA漏洞平台渗透测试及代码审计报告-1.2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/02/02/DVWA漏洞平台渗透测试及代码审计报告-1.2/" class="article-date">
-  <time datetime="2018-02-02T09:34:38.000Z" itemprop="datePublished">2018-02-02</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      DVWA漏洞平台渗透测试及代码审计
-    </h1>
-  
+<style>
 
-      </header>
+    header.intro-header {
+        background-image: url('')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Harold_404
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="">
+
+
+<style>
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
+    header.intro-header {
+        background-image: url('')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>DVWA漏洞平台渗透测试及代码审计</h1>
+                    
+                    <span class="meta">
+                         作者 Harold_404
+                        <span>
+                          日期 2018-02-02
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            DVWA漏洞平台渗透测试及代码审计
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <blockquote>
 <p>注：如下图所示，此报告研究顺序参照DVWA测试平台中各模块的排序。</p>
 <p><img src="D:/DVWA报告/00 目录666.png" alt="00 目录"></p>
 </blockquote>
@@ -293,103 +350,158 @@
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>经过一段时间的忙碌学习，尽管由于各种各样的干扰因素，一定程度上影响了测试和撰写报告的进度，但最终还是在不断的努力下，完成了最初宏大目标“四个安全级别九个模块三十六项测试”的一半工作量。于我个人而言这确实是件十分遗憾的事情，毕竟由于时间关系没能将最好的学习成果展示给师傅们。但这几天下来，我深切地感受到了自己所发挥出的最好的学习状态，每当解决了一个困扰许久的问题时，源自内心深处的满足感给我带来的强大的动力。之前我有时在想，如果我可以把上学期期末考试前“三天看225页《C Primer Plus》”的学习效率复制到60%的日常生活中，那该有多好，至少在这几天里，我做到了，并为此感到非常开心。我很喜欢兔子师傅的一句话：“加入三叶草不是学习技术的结束，反而恰恰是学习技术的开始。”我们不是为了加入三叶草而学习技术，而是为了学习技术而加入三叶草。大一和大二的这一年多时间里，我在三叶草的实验室里感受到了浓厚的学习氛围<del>（和土豪气质）</del>，并深深地喜欢上了这里，如果可以，我希望可以在这里，充实地度过大学的三年时光。谢谢。</p>
 <p>​                                                            2017.10.25  凌晨  于成都</p>
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://har01d.me/2018/02/02/DVWA漏洞平台渗透测试及代码审计报告-1.2/" data-id="cjd5s285i0000kkkgjik58jx9" class="article-share-link">Teilen</a>
-      
-      
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-  
-    <a href="/2018/02/01/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Älter</strong>
-      <div class="article-nav-title">Hello World</div>
-    </a>
-  
-</nav>
+                <hr>
+                
 
-  
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2018/02/01/hello-world/" data-toggle="tooltip" data-placement="top"
+                           title="Hello World">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0X01-环境配置介绍"><span class="toc-text">0X01 环境配置介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#环境配置"><span class="toc-text">环境配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#环境配置遇到的问题"><span class="toc-text">环境配置遇到的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#问题一：PHP-function-allow-url-include-Disabled"><span class="toc-text">问题一：PHP function allow_url_include: Disabled</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#问题二：reCAPTCHA-key-Missing"><span class="toc-text">问题二：reCAPTCHA key: Missing</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#完成配置"><span class="toc-text">完成配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-Brute-Force-（暴力破解）"><span class="toc-text">0x02 Brute Force （暴力破解）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Low"><span class="toc-text">Low</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#思路一：Brute-Force"><span class="toc-text">思路一：Brute Force</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#思路二：SQL-Injection"><span class="toc-text">思路二：SQL Injection</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Medium"><span class="toc-text">Medium</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#思路一：SQL-Injection"><span class="toc-text">思路一：SQL Injection</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#思路二：Brute-Force"><span class="toc-text">思路二：Brute Force</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#High"><span class="toc-text">High</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Impossible"><span class="toc-text">Impossible</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-Command-Injection-（命令注入）"><span class="toc-text">0x03 Command Injection （命令注入）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Low-1"><span class="toc-text">Low</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Medium-1"><span class="toc-text">Medium</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#思路一：使用其他各种系统命令行语法来突破过滤"><span class="toc-text">思路一：使用其他各种系统命令行语法来突破过滤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#思路二：利用黑名单过滤机制的限制-缺陷，绕过过滤"><span class="toc-text">思路二：利用黑名单过滤机制的限制/缺陷，绕过过滤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#思路三：PING攻击"><span class="toc-text">思路三：PING攻击</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#预防措施"><span class="toc-text">预防措施</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#High-1"><span class="toc-text">High</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#思路一：利用黑名单中的疏漏，使用其他各种系统命令行语法来突破过滤"><span class="toc-text">思路一：利用黑名单中的疏漏，使用其他各种系统命令行语法来突破过滤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#思路二：利用黑名单过滤机制的限制-缺陷，绕过过滤-1"><span class="toc-text">思路二：利用黑名单过滤机制的限制/缺陷，绕过过滤</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Impossible-1"><span class="toc-text">Impossible</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-CSRF"><span class="toc-text">0x04 CSRF</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Low-2"><span class="toc-text">Low</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#思路一：构造链接"><span class="toc-text">思路一：构造链接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#思路二："><span class="toc-text">思路二：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Medium-2"><span class="toc-text">Medium</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#High-2"><span class="toc-text">High</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Impossible-2"><span class="toc-text">Impossible</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x08-SQL-Injection"><span class="toc-text">0x08 SQL Injection</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Low-3"><span class="toc-text">Low</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#注入payload"><span class="toc-text">注入payload</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-判断是否存在注入点"><span class="toc-text">1.判断是否存在注入点</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-猜解字段数"><span class="toc-text">2.猜解字段数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-获取数据库名"><span class="toc-text">3.获取数据库名</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-获取表名"><span class="toc-text">4.获取表名</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-获取列名（字段名）"><span class="toc-text">5.获取列名（字段名）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-获取数据"><span class="toc-text">6.获取数据</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Medium-3"><span class="toc-text">Medium</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#注入payload-1"><span class="toc-text">注入payload</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#High-3"><span class="toc-text">High</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Impossible-3"><span class="toc-text">Impossible</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
 </article>
 
-</section>
-        
-          <aside id="sidebar">
-  
-    
 
-  
-    
 
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li></ul>
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Harold_404 2018
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
     </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2018/02/02/DVWA漏洞平台渗透测试及代码审计报告-1.2/">DVWA漏洞平台渗透测试及代码审计</a>
-          </li>
-        
-          <li>
-            <a href="/2018/02/01/hello-world/">Hello World</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2018 Harold_404<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
 </footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://har01d.me/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+<!-- Baidu Tongji -->
 
 
-<script src="/js/script.js"></script>
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
 
+  _st('install','','2.0.0');
+</script>
 
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-  </div>
+<!--wechat title img-->
+<img class="wechat-title-img" src="">
 </body>
+
 </html>
