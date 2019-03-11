@@ -200,16 +200,16 @@
                 <h1 id="Overview"><a href="#Overview" class="headerlink" title="#  Overview"></a>#  Overview</h1><p><a href="http://www.dvwa.co.uk/" target="_blank" rel="noopener">DVWA</a>（Damn Vulnerable Web Application）是一个用来进行Web安全练习的PHP/MySQL Web应用程序。</p>
 <p>学习笔记的第（一）部分将介绍 DVWA 12种漏洞类型中的 Brute Force （暴力破解）、Command Injection （命令注入）、CSRF 共三种漏洞类型的内容。</p>
 <h1 id="Environment-Configuration"><a href="#Environment-Configuration" class="headerlink" title="#  Environment Configuration"></a>#  Environment Configuration</h1><p>使用VMWare Workstation搭建Windows 10虚拟机，安装phpstudy，将DVWA放入WWW文件夹，访问setup.php进行安装，检查发现以下问题：</p>
-<p><img src="http://p3irvtxcv.bkt.clouddn.com/201808071552_489.png" alt=""></p>
+<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/001/01.png" alt=""></p>
 <ul>
 <li><p><strong>问题一：PHP function allow_url_include: Disabled</strong></p>
-<p><img src="http://p3irvtxcv.bkt.clouddn.com/201808071548_81.png" alt=""></p>
+<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/001/02.png" alt=""></p>
 <p>相关资料：<a href="http://www.chinaz.com/program/2010/0422/112286.shtml" target="_blank" rel="noopener">http://www.chinaz.com/program/2010/0422/112286.shtml</a></p>
 </li>
 <li><p><strong>问题二：reCAPTCHA key: Missing</strong></p>
 </li>
 </ul>
-<p><img src="http://p3irvtxcv.bkt.clouddn.com/201808071551_580.png" alt=""></p>
+<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/001/03.png" alt=""></p>
 <p>搜索了解到，reCAPTCHA是Google的开源免费验证码项目，需要前往www.google.com/recaptcha/admin/create申请key（public_key和private_key）。猜测可能是“High”或“Impossible”难度中为防范暴力破解而采用的验证手段。</p>
 <blockquote>
 <p>后来在查看配置文件时在代码附近看到了注释形式的“关于reCAPTCHA的介绍和说明”，以后还是要养成先看代码注释再搜索的好习惯，能够节省许多时间。</p>
@@ -221,18 +221,18 @@
 <p>通过学习得知isset()的用途是检测变量是否设置，并返回布尔值（TURE/FALSE）。即服务器仅仅验证了参数Login是否被设置，且对参数username和password没有进行过滤，既可以进行爆破尝试，也可以利用SQL注入。</p>
 <p><strong>思路一：Brute Force</strong></p>
 <p>使用Burp Suite抓包，”Action”→”Send to Intruder：</p>
-<p><img src="http://p3irvtxcv.bkt.clouddn.com/201808071600_863.png" alt=""></p>
+<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/001/04.png" alt=""></p>
 <p>“Intruder”→”Payload Positions”，对password进行爆破：</p>
-<p><img src="http://p3irvtxcv.bkt.clouddn.com/201808071602_246.png" alt=""></p>
+<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/001/05.png" alt=""></p>
 <p>“Intruder”→”Payload Options”，选择password字典爆破：</p>
-<p><img src="http://p3irvtxcv.bkt.clouddn.com/201808071602_834.png" alt=""></p>
+<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/001/06.png" alt=""></p>
 <p>查看Results（爆破结果），共3424条记录，将响应包按“Length”排序观察，发现当payload为“password”时，响应包长度不同于其他包：</p>
-<p><img src="http://p3irvtxcv.bkt.clouddn.com/201808071603_702.png" alt=""></p>
+<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/001/07.png" alt=""></p>
 <p>使用“admin/password”登录，登录成功√</p>
 <p>注：如需对两个参数username和password同时进行爆破，可在“Positions”选项卡中选择“Cluster bomb”模式。</p>
 <p><strong>思路二：SQL Injection</strong></p>
 <p>尝试单引号，出现报错信息，由此判断存在SQL注入漏洞：</p>
-<p><img src="http://p3irvtxcv.bkt.clouddn.com/201808071605_919.png" alt=""></p>
+<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/001/08.png" alt=""></p>
 <blockquote>
 <p>You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ‘d41d8cd98f00b204e9800998ecf8427e’’ at line 1</p>
 </blockquote>
@@ -243,7 +243,7 @@
 <p>Password:NULL</p>
 <p>注入成功√</p>
 <p>（DVWA注入成功时的页面略喜感啊）</p>
-<p><img src="http://p3irvtxcv.bkt.clouddn.com/201808071605_360.png" alt=""></p>
+<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/001/09.png" alt=""></p>
 <h2 id="Medium"><a href="#Medium" class="headerlink" title="##  Medium"></a>##  Medium</h2><p>以下是Medium安全级别Brute Force的服务器端核心php代码：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>( <span class="keyword">isset</span>( $_GET[ <span class="string">'Login'</span> ] ) ) &#123;</span><br><span class="line"><span class="comment">// Sanitise username input</span></span><br><span class="line">$user = $_GET[ <span class="string">'username'</span> ];</span><br><span class="line">$user = ((<span class="keyword">isset</span>($GLOBALS[<span class="string">"___mysqli_ston"</span>]) &amp;&amp; is_object($GLOBALS[<span class="string">"___mysqli_ston"</span>])) ? mysqli_real_escape_string($GLOBALS[<span class="string">"___mysqli_ston"</span>],  $user ) : ((trigger_error(<span class="string">"This code does not work."</span>, E_USER_ERROR))));</span><br><span class="line"></span><br><span class="line"><span class="comment">// Sanitise password input</span></span><br><span class="line">$pass = $_GET[ <span class="string">'password'</span> ];</span><br><span class="line">$pass = ((<span class="keyword">isset</span>($GLOBALS[<span class="string">"___mysqli_ston"</span>]) &amp;&amp; is_object($GLOBALS[<span class="string">"___mysqli_ston"</span>])) ? mysqli_real_escape_string($GLOBALS[<span class="string">"___mysqli_ston"</span>],  $pass ) : ((trigger_error(<span class="string">"This code does not work."</span>, E_USER_ERROR))));</span><br><span class="line">$pass = md5( $pass );</span><br><span class="line"></span><br><span class="line"><span class="comment">// Login failed</span></span><br><span class="line">sleep( <span class="number">2</span> );</span><br><span class="line">$html .= <span class="string">"&lt;pre&gt;&lt;br /&gt;Username and/or password incorrect.&lt;/pre&gt;"</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p><strong>思路一：SQL Injection</strong></p>
@@ -265,7 +265,7 @@
 </blockquote>
 <p>具体爆破方法同Low安全级别，爆破的速度受到了严重影响，极大地增加了爆破所需要的时间。</p>
 <h2 id="High"><a href="#High" class="headerlink" title="##      High"></a>##      High</h2><p>通过学习了解到采用了Anti-CSRF token的机制，在每一次提交请求的时候都先检查了token，然后才进行SQL查询，而解决token问题的通用手段是使用python编写脚本，接下来会进行详细的学习。这里贴上在网上找到的一份python脚本：</p>
-<p><img src="http://p3irvtxcv.bkt.clouddn.com/201808071609_836.png" alt=""></p>
+<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/001/10.png" alt=""></p>
 <h2 id="Impossible"><a href="#Impossible" class="headerlink" title="##  Impossible"></a>##  Impossible</h2><p>进行爆破尝试，发现“password”的响应包长度与其他包相同，猜测由于频繁的错误登录请求，账户已经被锁定。爆破失败。</p>
 <p>对代码进行审计发现，当同一账户在最近15分钟内存在五个错误的登录请求，该账户将会被锁定。被锁定的用户即使使用有效的密码，也会被提示“your username and/or password is incorrect”。 这将使爆破无法知晓系统上是否存在有效的帐户，密码以及帐户是否被锁定。</p>
 <h1 id="Command-Injection"><a href="#Command-Injection" class="headerlink" title="#  Command Injection"></a>#  Command Injection</h1><h2 id="Low-1"><a href="#Low-1" class="headerlink" title="##  Low"></a>##  Low</h2><p><strong>Reference：</strong></p>
@@ -279,7 +279,7 @@
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>( <span class="keyword">isset</span>( $_POST[ <span class="string">'Submit'</span> ]  ) ) &#123;</span><br><span class="line"><span class="comment">// Get input</span></span><br><span class="line">$target = $_REQUEST[ <span class="string">'ip'</span> ];</span><br><span class="line"></span><br><span class="line"><span class="comment">// Determine OS and execute the ping command.</span></span><br><span class="line"><span class="keyword">if</span>( stristr( php_uname( <span class="string">'s'</span> ), <span class="string">'Windows NT'</span> ) ) &#123;</span><br><span class="line">	<span class="comment">// Windows</span></span><br><span class="line">	$cmd = shell_exec( <span class="string">'ping  '</span> . $target );</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">	<span class="comment">// *nix</span></span><br><span class="line">	$cmd = shell_exec( <span class="string">'ping  -c 4 '</span> . $target );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p>可以看到代码利用stristr()和php_uname()两个函数进行了对操作系统的简单判断，从而执行不同的ping命令，对提交的参数“ip”没有进行任何过滤处理。</p>
 <p>通过查询了解到Windows和Linux系统都可以使用“&amp;&amp;”连接多条命令来执行，尝试提交“127.0.0.1 &amp;&amp; ipconfig &amp;&amp; net user”，执行成功，结果如下：</p>
-<p><img src="http://p3irvtxcv.bkt.clouddn.com/201808071632_258.png" alt=""></p>
+<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/001/11.png" alt=""></p>
 <h2 id="Medium-1"><a href="#Medium-1" class="headerlink" title="##  Medium"></a>##  Medium</h2><p>以下是Medium安全级别Command Injection的服务器端核心php代码：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>( <span class="keyword">isset</span>( $_POST[ <span class="string">'Submit'</span> ]  ) ) &#123;</span><br><span class="line"><span class="comment">// Get input</span></span><br><span class="line">$target = $_REQUEST[ <span class="string">'ip'</span> ];</span><br><span class="line"></span><br><span class="line"><span class="comment">// Set blacklist</span></span><br><span class="line">$substitutions = <span class="keyword">array</span>(</span><br><span class="line">	<span class="string">'&amp;&amp;'</span> =&gt; <span class="string">''</span>,</span><br><span class="line">	<span class="string">';'</span>  =&gt; <span class="string">''</span>,</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Remove any of the charactars in the array (blacklist).</span></span><br><span class="line">$target = str_replace( array_keys( $substitutions ), $substitutions, $target );</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p><strong>思路一：使用其他各种系统命令行语法来突破过滤</strong></p>
@@ -307,9 +307,9 @@
 <blockquote>
 <p>ping xxx.xxx.xxx.xxx –l 65500</p>
 </blockquote>
-<p><img src="http://p3irvtxcv.bkt.clouddn.com/201808071634_553.png" alt=""></p>
+<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/001/12.png" alt=""></p>
 <p>（当选项 -l 的值，即发送缓冲区大小超过65500是提示错误，有效范围从 0 到 65500。）</p>
-<p><img src="http://p3irvtxcv.bkt.clouddn.com/201808071640_898.png" alt=""></p>
+<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/001/13.png" alt=""></p>
 <p><strong>预防措施</strong></p>
 <p>对Internet控制消息协议(ICMP)选项进行详细地设置；<br>防火墙启用ICMP过滤；<br>通过IP安全机制（IPSecurity）来配置IPSec安全服务。<br>具体细节不在此赘述。</p>
 <p>在学习过程中了解到了“通过ping命令返回的TTL值判断服务器操作系统”的简便方法，又学了一招^_^</p>
@@ -318,7 +318,7 @@
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'| '</span> =&gt; <span class="string">''</span></span><br></pre></td></tr></table></figure>
 <p>如果仔细观察会发现“|”后面有一个空格，查询后得知，“|”为管道符，其主要作用为“将前一个命令的标准输出作为后一个命令的标准输入，并打印后一个命令执行的结果”，其利用方法如下：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>|net user</span><br></pre></td></tr></table></figure>
-<p><img src="http://p3irvtxcv.bkt.clouddn.com/201808071641_962.png" alt=""></p>
+<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/001/14.png" alt=""></p>
 <p><strong>思路二：利用黑名单过滤机制的限制/缺陷，绕过过滤</strong></p>
 <p>在尝试同Low安全级别思路二相同的方法时，发现黑名单对单个的”&amp;”和”|”字符都进行了过滤，无法实施，突破失败_(:з」∠)_</p>
 <h2 id="Impossible-1"><a href="#Impossible-1" class="headerlink" title="##  Impossible"></a>##  Impossible</h2><p>审计代码后发现，服务器通过利用stripslashes(),explode(),is_numeric()三个函数将输入处理为含有四个纯数字元素的一维数组，然后使用以下语句将输入的ip地址重组为“数字.数字.数字.数字”的形式：</p>
